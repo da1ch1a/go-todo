@@ -9,7 +9,7 @@ import (
 func Home(c echo.Context) error {
 	return c.Render(http.StatusOK, "top.html", map[string]interface{}{
 		"title": "Top Page",
-		"h1": 	"Hello, World!",
+		"h1": 	"タスク一覧",
 	})
 }
 
