@@ -1,19 +1,31 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
+	"da1ch1a/go-todo/pkg/presentation/routers"
+	"io"
+	"text/template"
 
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
-	fmt.Println("Hello, World!")
+	// テンプレートのプレコンパイル
+	t := &Template{
+		templates: template.Must(template.ParseGlob("pkg/presentation/views/*.html")),
+	}
 
 	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!aaa")
-	})
+	e.Renderer = t
+	routers.Router(e)
+
 	e.Logger.Fatal(e.Start(":1323"))
 }
 
+// echo.Rendererインターフェースの実装
+type Template struct {
+	templates *template.Template
+}
+
+func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	return t.templates.ExecuteTemplate(w, name, data)
+}
