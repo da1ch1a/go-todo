@@ -1,17 +1,14 @@
 {{define "content"}}
 
-<h1 class="text-3xl font-bold underline">{{.h1}}</h1>
-<p>this is top page</p>
+<h1 class="text-3xl font-bold underline mb-4">{{.H1}}</h1>
 
-<div class="flex flex-col mt-4">
+{{range .Tasks}}
+<div>
   <label>
-    <input name="task1" type="checkbox">
-    タスク1
-  </label>
-  <label>
-    <input name="task2" type="checkbox">
-    タスク2
+    {{if .Done}}<input type="checkbox" checked>{{else}}<input type="checkbox">{{end}}
+    {{.Name}}
   </label>
 </div>
+{{end}}
 
 {{end}}

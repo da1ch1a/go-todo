@@ -1,6 +1,8 @@
 package main
 
 import (
+	"da1ch1a/go-todo/pkg/infra"
+	"da1ch1a/go-todo/pkg/presentation/registry"
 	"da1ch1a/go-todo/pkg/presentation/routers"
 	"io"
 	"log"
@@ -17,14 +19,9 @@ func main() {
     log.Fatal("Error loading .env file")
   }
 
-	// テンプレートのプレコンパイル
-	t := &Template{
-		templates: template.Must(template.ParseGlob("pkg/presentation/views/*.html")),
-	}
-
-	e := echo.New()
-	e.Renderer = t
-	routers.Router(e)
+	// 初期化
+	r := initializeRegistry()
+	e := routers.NewRouter(r)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
@@ -36,4 +33,11 @@ type Template struct {
 
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 	return t.templates.ExecuteTemplate(w, "layout.html", data)
+}
+
+func initializeRegistry() *registry.Registry {
+	// DBの初期化
+	db := infra.InitDb()
+
+	return registry.BuildRegistry(db)
 }
