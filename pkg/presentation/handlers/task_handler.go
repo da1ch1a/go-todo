@@ -2,28 +2,25 @@ package handlers
 
 import (
 	"da1ch1a/go-todo/pkg/application/usecase"
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
 
-func Home(c echo.Context) error {
-	taskUsecase := usecase.TaskUsecase{}
-	tasks := taskUsecase.List()
+type TaskHandler struct {}
 
-	return c.Render(http.StatusOK, "top.html", map[string]interface{}{
-		"H1":    "タスク一覧",
-		"Tasks": &tasks,
-	})
+func (h *TaskHandler) List(c echo.Context) error {
+	accept := c.Request().Header.Get(echo.HeaderAccept)
+	if accept == echo.MIMEApplicationJSON {
+		taskUsecase := usecase.TaskUsecase{}
+		return taskUsecase.List(c)
+	}
+
+	return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid Accept header: %s", accept))
 }
 
-func About(c echo.Context) error {
-	return c.Render(http.StatusOK, "about.html", map[string]interface{}{
-		"h1": "About Page",
-	})
-}
-
-func Json(e echo.Context) error {
+func (h *TaskHandler) Json(e echo.Context) error {
 	header := e.Request().Header
 	accept := header.Get(echo.HeaderAccept)
 
@@ -35,4 +32,3 @@ func Json(e echo.Context) error {
 
 	return err
 }
-

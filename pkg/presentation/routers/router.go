@@ -31,9 +31,10 @@ func NewRouter(r *registry.Registry) *echo.Echo {
 	e := echo.New()
 	e.Renderer = t
 
-	e.GET("/", handlers.Home)
-	e.GET("/about", handlers.About)
-	e.GET("/json", handlers.Json)
+	taskHandler := handlers.TaskHandler{}
+
+	e.GET("/tasks", taskHandler.List)
+	e.GET("/json", taskHandler.Json)
 
 	return e
 }
