@@ -2,26 +2,37 @@ package main
 
 import (
 	"da1ch1a/go-todo/pkg/infra"
+	"da1ch1a/go-todo/pkg/presentation/handlers"
 	"da1ch1a/go-todo/pkg/presentation/registry"
 	"da1ch1a/go-todo/pkg/presentation/routers"
 	"io"
-	"log"
+
 	"text/template"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"github.com/labstack/gommon/log"
 )
 
 func main() {
 	envPath := "config/env/.env"
 	err := godotenv.Load(envPath)
-  if err != nil {
-    log.Fatal("Error loading .env file")
-  }
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
 	// 初期化
 	r := initializeRegistry()
 	e := routers.NewRouter(r)
+
+	// エラーハンドラの設定
+	e.HTTPErrorHandler = handlers.ErrorHandler
+
+	// access log ドキュメント通り
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "method=${method}, uri=${uri}, status=${status}\n",
+	}))
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

@@ -22,3 +22,17 @@ func About(c echo.Context) error {
 		"h1": "About Page",
 	})
 }
+
+func Json(e echo.Context) error {
+	header := e.Request().Header
+	accept := header.Get(echo.HeaderAccept)
+
+	if accept == echo.MIMEApplicationJSON {
+		return e.JSON(http.StatusOK, map[string]string{"response": "JSONで返すぜ"})
+	}
+
+	err := echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid Accept header: %s", accept))
+
+	return err
+}
+

@@ -33,6 +33,7 @@ func NewRouter(r *registry.Registry) *echo.Echo {
 
 	e.GET("/", handlers.Home)
 	e.GET("/about", handlers.About)
+	e.GET("/json", handlers.Json)
 
 	return e
 }
