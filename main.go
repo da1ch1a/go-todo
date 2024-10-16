@@ -37,11 +37,13 @@ func main() {
 	e.Logger.Fatal(e.Start(":1323"))
 }
 
+// TODO フロントがある程度形になったら消す
 // echo.Rendererインターフェースの実装
 type Template struct {
 	templates *template.Template
 }
 
+// TODO フロントがある程度形になったら消す
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 	return t.templates.ExecuteTemplate(w, "layout.html", data)
 }
