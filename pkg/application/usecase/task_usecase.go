@@ -3,29 +3,63 @@ package usecase
 import (
 	"da1ch1a/go-todo/pkg/domain/model"
 	"da1ch1a/go-todo/pkg/domain/repository"
-	"da1ch1a/go-todo/pkg/infra"
-	"fmt"
+	"encoding/json"
+	"io"
+	"log"
+
+	"github.com/labstack/echo/v4"
 )
 
 type TaskUsecase struct {
 	TaskRepository repository.TaskRepository
 }
 
-func (ts *TaskUsecase) List() []model.Task {
-	rows, err := infra.Db.Query("SELECT id, name, done FROM tasks")
+func (u *TaskUsecase) List() []model.Task {
+	tasks, err := u.TaskRepository.FindAll()
 	if err != nil {
-		fmt.Println(err)
-	}
-	defer rows.Close()
-
-	var tasks []model.Task
-	for rows.Next() {
-		var task model.Task
-		if err := rows.Scan(&task.ID, &task.Name, &task.Done); err != nil {
-			fmt.Println(err)
-		}
-		tasks = append(tasks, task)
+		return nil
 	}
 
 	return tasks
+}
+
+func (u *TaskUsecase) Create(c echo.Context) error {
+	jsonBody, err := u.getBody(c)
+	if err != nil {
+		return err
+	}
+
+	task, err := model.NewTaskFromJson(jsonBody)
+	if err != nil {
+		return err
+	}
+
+	err = u.TaskRepository.Create(task)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (u *TaskUsecase) getBody(c echo.Context) (map[string]interface{}, error) {
+	body := c.Request().Body
+	defer func() {
+		_ = body.Close()
+	}()
+	data, err := io.ReadAll(body)
+	if err != nil {
+		log.Printf("failed to read body: %#v", err)
+		return nil, err
+	}
+
+	// parse json
+	var jsonBody map[string]interface{}
+	err = json.Unmarshal(data, &jsonBody)
+	if err != nil {
+		log.Printf("failed to unmarshal json: %#v", err)
+		return nil, err
+	}
+
+	return jsonBody, nil
 }
