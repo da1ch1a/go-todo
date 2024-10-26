@@ -1,7 +1,7 @@
 pkgname  = "schemas"
 output   = "schemas"
 wipe     = true
-no-tests = false
+no-tests = true
 # add-enum-types = true
 # no-auto-timestamps = true
 
@@ -11,5 +11,5 @@ no-tests = false
   port = 33060
   user = "user"
   pass = "password"
-  sslmode = false
+  sslmode = "false"
   blacklist = ["schema_migrations"]

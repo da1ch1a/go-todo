@@ -17,6 +17,7 @@ type TaskUsecase struct {
 func (u *TaskUsecase) List() []model.Task {
 	tasks, err := u.TaskRepository.FindAll()
 	if err != nil {
+		log.Printf("failed to find all tasks: %#v", err)
 		return nil
 	}
 
