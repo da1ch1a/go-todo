@@ -1,0 +1,15 @@
+pkgname  = "schemas"
+output   = "schemas"
+wipe     = true
+no-tests = false
+# add-enum-types = true
+# no-auto-timestamps = true
+
+[mysql]
+  dbname = "go_todo_local"
+  host = "localhost"
+  port = 33060
+  user = "user"
+  pass = "password"
+  sslmode = false
+  blacklist = ["schema_migrations"]
