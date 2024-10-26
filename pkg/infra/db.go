@@ -1,12 +1,15 @@
 package infra
 
 import (
+	"da1ch1a/go-todo/pkg/core"
 	"database/sql"
 	"fmt"
 	"log"
 	"os"
 
 	"github.com/go-sql-driver/mysql"
+	sqldblogger "github.com/simukti/sqldb-logger"
+	"github.com/simukti/sqldb-logger/logadapter/zerologadapter"
 )
 
 // 疎通確認のため一時的にpublicに
@@ -34,6 +37,12 @@ func InitDb() *sql.DB {
 	if err != nil {
 		log.Fatal(err)
 	}
+	Db = sqldblogger.OpenDriver(
+		cfg.FormatDSN(),
+		Db.Driver(),
+		zerologadapter.New(core.Logger),
+		sqldblogger.WithMinimumLevel(sqldblogger.LevelDebug),
+	)
 
 	pingErr := Db.Ping()
 	if pingErr != nil {

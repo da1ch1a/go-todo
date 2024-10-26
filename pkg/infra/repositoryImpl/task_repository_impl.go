@@ -21,8 +21,6 @@ func NewTaskRepositoryImpl(db *sql.DB) *TaskRepositoryImpl {
 }
 
 func (r *TaskRepositoryImpl) FindAll() ([]model.Task, error) {
-	boil.DebugMode = true
-
 	schemasTasks, err := schemas.Tasks().All(context.Background(), r.db)
 	if err != nil {
 		return nil, err
@@ -44,8 +42,6 @@ func (r *TaskRepositoryImpl) FindAll() ([]model.Task, error) {
 }
 
 func (r *TaskRepositoryImpl) Create(task *model.Task) error {
-	boil.DebugMode = true
-
 	done := uint8(0)
 	if task.Done {
 		done = 1
