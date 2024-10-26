@@ -6,20 +6,25 @@ import (
 	"da1ch1a/go-todo/pkg/presentation/registry"
 	"da1ch1a/go-todo/pkg/presentation/routers"
 	"io"
+	"os"
 
 	"text/template"
 
 	"github.com/joho/godotenv"
-	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/labstack/gommon/log"
+	"github.com/labstack/echo/v4"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	log.Info().Str("foo", "bar").Msg("This is zerolog test")
+
 	envPath := "config/env/.env"
 	err := godotenv.Load(envPath)
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal().Msg("Error loading .env file")
 	}
 
 	// 初期化
