@@ -15,5 +15,30 @@ services:
     volumes:
       - go-todo-mysql-data:/var/lib/mysql
       - ./docker/local/mysql/config/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - go-todo-network
+
+  app:
+    image: go-todo-backend-image
+    container_name: go-todo-backend
+    depends_on:
+      - db
+    # DBコンテナが起動するまで待たないとエラーになる
+    entrypoint: ["sh", "-c", "./wait-for.sh db:3306 -- ./local_entrypoint.sh"]
+    build:
+      context: .
+      dockerfile: ./docker/local/Dockerfile
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./:/go/src/app
+    ports:
+      - "8090:8090"
+    networks:
+      - go-todo-network
+
 volumes:
   go-todo-mysql-data:
+
+networks:
+  go-todo-network:
