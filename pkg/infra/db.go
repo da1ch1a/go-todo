@@ -20,8 +20,8 @@ func InitDb() *sql.DB {
 	cfg := mysql.Config{
 		User:                 os.Getenv("DB_USER"),
 		Passwd:               os.Getenv("DB_PASSWORD"),
-		Net:                  "tcp",
-		Addr:                 os.Getenv("DB_HOST"),
+		Net:                  os.Getenv("DB_NET"),
+		Addr:                 os.Getenv("DB_ADDR"),
 		DBName:               os.Getenv("DB_NAME"),
 		AllowNativePasswords: true, // rootでログインするため
 		Params: map[string]string{
