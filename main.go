@@ -6,6 +6,7 @@ import (
 	"da1ch1a/go-todo/pkg/presentation/registry"
 	"da1ch1a/go-todo/pkg/presentation/routers"
 	"io"
+	"os"
 
 	"text/template"
 
@@ -16,10 +17,13 @@ import (
 )
 
 func main() {
-	envPath := "config/env/.env"
-	err := godotenv.Load(envPath)
-	if err != nil {
-		log.Fatal().Msg("Error loading .env file")
+	// ローカル環境でのみ.envファイルを読み込む。Cloud Runではコンソールから環境変数を設定する。
+	if os.Getenv("ENV") == "local" {
+		envPath := "config/env/.env"
+		err := godotenv.Load(envPath)
+		if err != nil {
+			log.Fatal().Msg("Error loading .env file")
+		}
 	}
 
 	// 初期化
@@ -34,7 +38,7 @@ func main() {
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
 	}))
 
-	e.Logger.Fatal(e.Start(":8090"))
+	e.Logger.Fatal(e.Start(":8080"))
 }
 
 // TODO フロントがある程度形になったら消す

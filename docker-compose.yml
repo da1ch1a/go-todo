@@ -33,7 +33,10 @@ services:
     volumes:
       - ./:/go/src/app
     ports:
-      - "8090:8090"
+      - "8080:8080"
+    # ローカル環境でのみ.envファイルを読み込み、Cloud Runではコンソールから環境変数を設定する
+    environment:
+      - ENV=local
     networks:
       - go-todo-network
 
