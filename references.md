@@ -33,3 +33,9 @@ https://github.com/simukti/sqldb-logger
 - mainパッケージでない場合はimportするだけで呼び出されるため初期化に使われる。mainパッケージで書くとmain関数より先に実行される。
 https://qiita.com/tenntenn/items/7c70e3451ac783999b4f
 
+## docker
+
+- docker-composeでコンテナが起動するまで待つ  
+- alpineではbashではなくshなので注意  
+https://github.com/Eficode/wait-for
+https://docs.docker.jp/compose/startup-order.html

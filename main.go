@@ -34,7 +34,7 @@ func main() {
 		Format: "method=${method}, uri=${uri}, status=${status}\n",
 	}))
 
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(":8090"))
 }
 
 // TODO フロントがある程度形になったら消す

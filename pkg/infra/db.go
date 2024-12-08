@@ -21,7 +21,8 @@ func InitDb() *sql.DB {
 		User:                 os.Getenv("DB_USER"),
 		Passwd:               os.Getenv("DB_PASSWORD"),
 		Net:                  "tcp",
-		Addr:                 "127.0.0.1:33060",
+		// Addr:                 "127.0.0.1:33060",
+		Addr:                 "go-todo-mysql:3306",
 		DBName:               "go_todo_local",
 		AllowNativePasswords: true, // rootでログインするため
 		Params: map[string]string{
