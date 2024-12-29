@@ -14,23 +14,37 @@ type TaskHandler struct {
 }
 
 func (h *TaskHandler) List(c echo.Context) error {
-	accept := c.Request().Header.Get(echo.HeaderAccept)
-	if accept != echo.MIMEApplicationJSON {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid Accept header: %s", accept))
+	if err := isAcceptJSON(c); err != nil {
+		return err
 	}
 
 	return c.JSON(http.StatusOK, h.Registry.TaskUsecase.List())
 }
 
 func (h *TaskHandler) Create(c echo.Context) error {
-	accept := c.Request().Header.Get(echo.HeaderAccept)
-	if accept != echo.MIMEApplicationJSON {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid Accept header: %s", accept))
+	if err := isAcceptJSON(c); err != nil {
+		return err
 	}
 
 	err := h.Registry.TaskUsecase.Create(c)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	return nil
+}
+
+func (h *TaskHandler) Test(c echo.Context) error {
+	if err := isAcceptJSON(c); err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, "testですよ")
+}
+
+func isAcceptJSON(c echo.Context) error {
+	accept := c.Request().Header.Get(echo.HeaderAccept)
+	if accept != echo.MIMEApplicationJSON {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid Accept header: %s", accept))
 	}
 	return nil
 }
