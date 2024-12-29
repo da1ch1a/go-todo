@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: check initial state
-        run: pwd
+        run: ls -la
       - name: Checkout
         uses: actions/checkout@v4
       - name: check after checkout
-        run: pwd
+        run: ls -la
