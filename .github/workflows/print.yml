@@ -9,5 +9,4 @@ jobs:
   print:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Hello, world!"
-      - run: "github.repository: ${{ github.repository }}"
+      - run: 'echo "Hello, world!\n repository: ${{ github.repository }}"'
