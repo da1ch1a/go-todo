@@ -9,4 +9,9 @@ jobs:
   print:
     runs-on: ubuntu-latest
     steps:
-      - run: 'echo "Hello, world!\n repository: ${{ github.repository }}"'
+      - name: check initial state
+        run: pwd
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: check after checkout
+        run: pwd
