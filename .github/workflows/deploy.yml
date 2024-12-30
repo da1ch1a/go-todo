@@ -7,6 +7,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: cloud-sql-test
     # permissionsセクションはAuthenticate to Google Cloudのドキュメント通り
     permissions:
       id-token: write
