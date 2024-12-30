@@ -16,6 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         # サービスアカウントにArtifact RegistryとCloud Runの権限を付与してみた
+        # サービスアカウントにサービス アカウント トークン作成者のロールを付与してみた
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
         # @v2では"service_account"を指定しない場合、「サービスアカウントの権限借用」ではなく「リソースへの直接アクセス（推奨）」になる
