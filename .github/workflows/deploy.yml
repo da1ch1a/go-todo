@@ -23,6 +23,7 @@ jobs:
           # create_credentials_file: true
           project_id: ${{ vars.GCP_PROJECT_ID }}
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          token_format: access_token
       - name: Print
         run: echo 'Authenticated to Google Cloud!'
       # ログインとビルドはGoogle Cloudのブログを参考に https://cloud.google.com/blog/ja/products/devops-sre/deploy-to-cloud-run-with-github-actions/
