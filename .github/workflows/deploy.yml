@@ -21,9 +21,11 @@ jobs:
       #     workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
+        # @v2では"service_account"を指定しない場合、「サービスアカウントの権限借用」ではなく「リソースへの直接アクセス」になる
         uses: 'google-github-actions/auth@v2'
         with:
-          create_credentials_file: true
+          # create_credentials_file: true
+          project_id: 'cloud-sql-test-443010'
           workload_identity_provider: 'projects/38543661057/locations/global/workloadIdentityPools/test/providers/github'
           # service_account: 'SERVICE_ACCOUNT_EMAIL'
       - name: Print
