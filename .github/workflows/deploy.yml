@@ -14,21 +14,30 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # - name: Authenticate to Google Cloud
-      #   uses: google-github-actions/auth@v2
-      #   with:
-      #     project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
-      #     workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
-        # @v2では"service_account"を指定しない場合、「サービスアカウントの権限借用」ではなく「リソースへの直接アクセス」になる
+        # @v2では"service_account"を指定しない場合、「サービスアカウントの権限借用」ではなく「リソースへの直接アクセス（推奨）」になる
         uses: 'google-github-actions/auth@v2'
         with:
           # create_credentials_file: true
-          project_id: 'cloud-sql-test-443010'
-          workload_identity_provider: 'projects/38543661057/locations/global/workloadIdentityPools/test/providers/github'
-          # service_account: 'SERVICE_ACCOUNT_EMAIL'
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
       - name: Print
-        run: echo 'done!'
-
-
+        run: echo 'Authenticated to Google Cloud!'
+      # ログインとビルドはGoogle Cloudのブログを参考に https://cloud.google.com/blog/ja/products/devops-sre/deploy-to-cloud-run-with-github-actions/
+      - name: Login to GAR
+        id: docker-auth
+        uses: 'docker/login-action@v3'
+        with:
+          # ドキュメント通り
+          username: 'oauth2accesstoken'
+          password: '${{ steps.auth.outputs.access_token }}'
+          registry: '${{ vars.REGION }}-docker.pkg.dev'
+      - name: Build, tag and push container
+        id: build-image
+        uses: docker/build-push-action@v6
+        with:
+          # context: ${{ vars.code_directory }}
+          push: true
+          tags: |
+            ${{ vars.REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ inputs.ref }}
