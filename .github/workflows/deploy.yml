@@ -15,6 +15,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        # ここでコケる
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
         # @v2では"service_account"を指定しない場合、「サービスアカウントの権限借用」ではなく「リソースへの直接アクセス（推奨）」になる
