@@ -1,0 +1,32 @@
+name: deploy
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # permissionsセクションはAuthenticate to Google Cloudのドキュメント通り
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # - name: Authenticate to Google Cloud
+      #   uses: google-github-actions/auth@v2
+      #   with:
+      #     project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
+      #     workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          create_credentials_file: true
+          workload_identity_provider: 'projects/38543661057/locations/global/workloadIdentityPools/test/providers/github'
+          # service_account: 'SERVICE_ACCOUNT_EMAIL'
+      - name: Print
+        run: echo 'done!'
+
+
