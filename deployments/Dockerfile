@@ -4,6 +4,7 @@ WORKDIR /go/src/app
 
 RUN go install github.com/cosmtrek/air@v1.50.0
 
+# ローカルでインストールしたバージョン
 RUN go install github.com/volatiletech/sqlboiler/v4@v4.16.2
 RUN go install github.com/volatiletech/sqlboiler/v4/drivers/sqlboiler-mysql@v4.16.2
 
