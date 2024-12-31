@@ -6,6 +6,7 @@ compose-up:
 compose-down:
 	docker compose down
 
+# ドキュメント通り https://github.com/golang-migrate/migrate?tab=readme-ov-file#docker-usage
 # マイグレーションを最新までまとめてupする
 migrate-db:
 	docker run -v ./migrations:/migrations --network host migrate/migrate -path=/migrations/ -database "mysql://root:rootpassword@tcp(localhost:33060)/go_todo_local" up

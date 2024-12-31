@@ -46,7 +46,8 @@ jobs:
         id: build-image
         uses: docker/build-push-action@v6
         with:
-          # context: ${{ vars.code_directory }}
+          context: .
+          file: ./deployments/Dockerfile
           push: true
           tags: |
             ${{ vars.REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ inputs.ref }}
