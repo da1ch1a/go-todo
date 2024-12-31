@@ -4,8 +4,8 @@ WORKDIR /go/src/app
 
 RUN go install github.com/cosmtrek/air@v1.50.0
 
-RUN go install github.com/volatiletech/sqlboiler/v4@4.17.1
-RUN go install github.com/volatiletech/sqlboiler/v4/drivers/sqlboiler-mysql@4.17.1
+RUN go install github.com/volatiletech/sqlboiler/v4@4.16.2
+RUN go install github.com/volatiletech/sqlboiler/v4/drivers/sqlboiler-mysql@4.16.2
 
 # コード全部をコピー
 COPY . .
