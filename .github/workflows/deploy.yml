@@ -64,14 +64,12 @@ jobs:
         run: |
           gcloud run deploy ${{ vars.SERVICE_NAME }} \
           --image=${{ vars.REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ github.sha }} \
-          --set-env-vars=[
-            DB_USER=${{ secrets.DB_USER }},
-            DB_PASSWORD=${{ secrets.DB_PASSWORD }},
-            DB_NAME=${{ secrets.DB_NAME }}
-            DB_ADDR=${{ secrets.DB_ADDR }},
-            DB_NET=${{ secrets.DB_NET }},
-            TEST=test
-          ] \
+          --set-env-vars=DB_USER=${{ secrets.DB_USER }} \
+          --set-env-vars=DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+          --set-env-vars=DB_NAME=${{ secrets.DB_NAME }} \
+          --set-env-vars=DB_ADDR=${{ secrets.DB_ADDR }} \
+          --set-env-vars=DB_NET=${{ secrets.DB_NET }} \
+          --set-env-vars=TEST=test \
           --region=asia-northeast1 \
           --allow-unauthenticated
 
