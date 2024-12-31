@@ -22,6 +22,7 @@ jobs:
         # @v2では"service_account"を指定しない場合、「サービスアカウントの権限借用」ではなく「リソースへの直接アクセス（推奨）」になる
         # "service_account"を指定しないとOAuth 2.0 Access Tokenを利用できないので、結局「サービスアカウントの権限借用」にする必要があるっぽい
         # アクセストークンがないと次のdockerログインができない（ドキュメントを見る限り）
+        # 403でトークンが発行できない
         uses: 'google-github-actions/auth@v2'
         with:
           # create_credentials_file: true
