@@ -61,7 +61,7 @@ jobs:
         # uses: google-github-actions/deploy-cloud-run@v2
         # gcloud run deployのオプションのドキュメント: https://cloud.google.com/sdk/gcloud/reference/run/deploy#--revision-suffix
         # --ingress=internal-and-cloud-load-balancing: Google Cloud Load Balancingまたはinternalオプションで許可されたトラフィックソースからのインバウンドリクエストのみが許可される.
-        # 権限借用しているサービスアカウントにCloud Run デベロッパーとサービス アカウント ユーザーの権限付与
+        # 権限借用しているサービスアカウントにCloud Run デベロッパーとサービスアカウントユーザーの権限付与
         run: |
           gcloud run deploy ${{ vars.SERVICE_NAME }} \
           --image=${{ vars.REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ github.sha }} \
