@@ -28,4 +28,4 @@ RUN CGO_ENABLED=0 go build -o ./tmp/app ./cmd/app
 EXPOSE 8080
 
 # 実行コマンド
-CMD ["/tmp/app"]
+CMD ["/go/src/app/tmp/app"]
