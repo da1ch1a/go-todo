@@ -38,7 +38,7 @@ func (h *TaskHandler) Test(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, "testですよaaaaaa")
+	return c.JSON(http.StatusOK, "testですよrrrr")
 }
 
 func isAcceptJSON(c echo.Context) error {

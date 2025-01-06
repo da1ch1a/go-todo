@@ -15,20 +15,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        # sqlboilerのインストールに失敗するからGo入れてみる
-        # - name: Set up Go
-        #   uses: actions/setup-go@v5
-        #   with:
-        #     go-version: 1.23
         # サービスアカウントにArtifact RegistryとCloud Runの権限を付与してみた
         # サービスアカウントにサービス アカウント トークン作成者のロールを付与してみた
         # プリンシパルを正しくできたはず
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
-        # @v2では"service_account"を指定しない場合、「サービスアカウントの権限借用」ではなく「リソースへの直接アクセス（推奨）」になる
+        # @v2では"service_account"を指定しない場合、「サービスアカウントの権限借用」ではなく「サービスアカウントの権限借用」ではなく「リソースへの直接アクセス（推奨）」になるになる
         # "service_account"を指定しないとOAuth 2.0 Access Tokenを利用できないので、結局「サービスアカウントの権限借用」にする必要があるっぽい
         # アクセストークンがないと次のdockerログインができない（ドキュメントを見る限り）
-        # 403でトークンが発行できない
         uses: 'google-github-actions/auth@v2'
         with:
           # create_credentials_file: true
