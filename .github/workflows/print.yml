@@ -1,0 +1,17 @@
+name: print
+
+on:
+  # 手動実行可能にする
+  workflow_dispatch:
+  push:
+
+jobs:
+  print:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check initial state
+        run: ls -la
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: check after checkout
+        run: ls -la

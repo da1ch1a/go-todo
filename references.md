@@ -39,3 +39,9 @@ https://qiita.com/tenntenn/items/7c70e3451ac783999b4f
 - alpineではbashではなくshなので注意  
 https://github.com/Eficode/wait-for
 https://docs.docker.jp/compose/startup-order.html
+
+
+
+## MySQL
+- コンテナ作成直後にappコンテナからdbコンテナに接続しようとすると、MySQL8の認証プラグインがcaching_sha2_passwordになっているため失敗するため、認証プラグインをcaching_sha2_passwordからmysql_native_passwordに変更する。(多分caching_sha2_passwordできちんと認証した方がいい)  
+https://qiita.com/shungo_m/items/5363c16b698ef6310014

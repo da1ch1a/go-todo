@@ -1,0 +1,70 @@
+name: deploy
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: cloud-sql-test
+    # permissionsセクションはAuthenticate to Google Cloudのドキュメント通り
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # サービスアカウントにArtifact RegistryとCloud Runの権限を付与してみた
+        # サービスアカウントにサービス アカウント トークン作成者のロールを付与してみた
+        # プリンシパルを正しくできたはず
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        # @v2では"service_account"を指定しない場合、「サービスアカウントの権限借用」ではなく「サービスアカウントの権限借用」ではなく「リソースへの直接アクセス（推奨）」になるになる
+        # "service_account"を指定しないとOAuth 2.0 Access Tokenを利用できないので、結局「サービスアカウントの権限借用」にする必要があるっぽい
+        # アクセストークンがないと次のdockerログインができない（ドキュメントを見る限り）
+        uses: 'google-github-actions/auth@v2'
+        with:
+          # create_credentials_file: true
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+      - name: Print
+        run: echo 'Authenticated to Google Cloud!'
+      # ログインとビルドはGoogle Cloudのブログを参考に https://cloud.google.com/blog/ja/products/devops-sre/deploy-to-cloud-run-with-github-actions/
+      - name: Login to GAR
+        id: docker-auth
+        uses: 'docker/login-action@v3'
+        with:
+          # ドキュメント通り
+          username: 'oauth2accesstoken'
+          password: '${{ steps.auth.outputs.access_token }}'
+          registry: '${{ vars.REGION }}-docker.pkg.dev'
+      - name: Build, tag and push container
+        id: build-image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./deployments/Dockerfile
+          push: true
+          tags: |
+            ${{ vars.REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ github.sha }}
+      - name: Deploy to Cloud Run
+        # gcloud run deployよりも↓の方がよさそう
+        # uses: google-github-actions/deploy-cloud-run@v2
+        # gcloud run deployのオプションのドキュメント: https://cloud.google.com/sdk/gcloud/reference/run/deploy#--revision-suffix
+        # --ingress=internal-and-cloud-load-balancing: Google Cloud Load Balancingまたはinternalオプションで許可されたトラフィックソースからのインバウンドリクエストのみが許可される.
+        # 権限借用しているサービスアカウントにCloud Run デベロッパーとサービスアカウントユーザーの権限付与
+        run: |
+          gcloud run deploy ${{ vars.SERVICE_NAME }} \
+          --image=${{ vars.REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ github.sha }} \
+          --set-env-vars=DB_USER=${{ secrets.DB_USER }} \
+          --set-env-vars=DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+          --set-env-vars=DB_NAME=${{ secrets.DB_NAME }} \
+          --set-env-vars=DB_ADDR=${{ secrets.DB_ADDR }} \
+          --set-env-vars=DB_NET=${{ secrets.DB_NET }} \
+          --set-env-vars=TEST=test \
+          --region=asia-northeast1 \
+          --allow-unauthenticated
+
