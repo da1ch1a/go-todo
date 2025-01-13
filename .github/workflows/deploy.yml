@@ -49,6 +49,7 @@ jobs:
           tags: |
             ${{ vars.REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ github.sha }}
       - name: Deploy to Cloud Run
+        # Cloud Runにデプロイするには、ビルドに使用するサービスアカウントにCloud Runデベロッパーとサービスアカウントユーザーのロールが必要 https://cloud.google.com/run/docs/continuous-deployment-with-cloud-build?hl=ja
         # gcloud run deployよりも↓の方がよさそう
         # uses: google-github-actions/deploy-cloud-run@v2
         # gcloud run deployのオプションのドキュメント: https://cloud.google.com/sdk/gcloud/reference/run/deploy#--revision-suffix
