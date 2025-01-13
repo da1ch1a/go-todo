@@ -16,8 +16,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         # サービスアカウントにArtifact RegistryとCloud Runの権限を付与してみた
-        # サービスアカウントにサービス アカウント トークン作成者のロールを付与してみた
-        # プリンシパルを正しくできたはず
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
         # @v2では"service_account"を指定しない場合、「サービスアカウントの権限借用」ではなく「サービスアカウントの権限借用」ではなく「リソースへの直接アクセス（推奨）」になるになる
@@ -55,7 +53,6 @@ jobs:
         # uses: google-github-actions/deploy-cloud-run@v2
         # gcloud run deployのオプションのドキュメント: https://cloud.google.com/sdk/gcloud/reference/run/deploy#--revision-suffix
         # --ingress=internal-and-cloud-load-balancing: Google Cloud Load Balancingまたはinternalオプションで許可されたトラフィックソースからのインバウンドリクエストのみが許可される.
-        # 権限借用しているサービスアカウントにCloud Run デベロッパーとサービスアカウントユーザーの権限付与
         run: |
           gcloud run deploy ${{ vars.SERVICE_NAME }} \
           --image=${{ vars.REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ github.sha }} \
