@@ -9,6 +9,7 @@ import (
 	// "text/template"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 // echo.Rendererインターフェースの実装
@@ -30,6 +31,9 @@ func NewRouter(r *registry.Registry) *echo.Echo {
 
 	e := echo.New()
 	e.Renderer = t
+
+	// CORSの設定 これを入れないとCORS error (strict-origin-when-cross-origin)が出る
+	e.Use(middleware.CORS())
 
 	taskHandler := handlers.TaskHandler{
 		Registry: r,
