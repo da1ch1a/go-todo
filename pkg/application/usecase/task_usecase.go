@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
@@ -36,6 +37,27 @@ func (u *TaskUsecase) Create(c echo.Context) error {
 	}
 
 	err = u.TaskRepository.Create(task)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (u *TaskUsecase) Update(c echo.Context, id string) error {
+	uuid, err := uuid.Parse(id)
+	if err != nil {
+		return err
+	}
+
+	jsonBody, err := u.getBody(c)
+	if err != nil {
+		return err
+	}
+
+	done := jsonBody["done"].(bool)
+
+	err = u.TaskRepository.Update(uuid, done)
 	if err != nil {
 		return err
 	}

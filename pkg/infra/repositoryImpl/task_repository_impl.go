@@ -6,6 +6,7 @@ import (
 	"da1ch1a/go-todo/schemas"
 	"database/sql"
 
+	"github.com/google/uuid"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
@@ -26,12 +27,11 @@ func (r *TaskRepositoryImpl) FindAll() ([]model.Task, error) {
 		return nil, err
 	}
 
-
 	tasks := make([]model.Task, len(schemasTasks))
 	for i, task := range schemasTasks {
 		tasks[i] = model.Task{
-			ID:   task.ID,
-			Name: task.Name,
+			ID:        task.ID,
+			Name:      task.Name,
 			Done:      task.Done == 1,
 			CreatedAt: task.CreatedAt.String(),
 			UpdatedAt: task.UpdatedAt.String(),
@@ -53,6 +53,26 @@ func (r *TaskRepositoryImpl) Create(task *model.Task) error {
 	}
 
 	err := t.Insert(context.Background(), r.db, boil.Infer())
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *TaskRepositoryImpl) Update(id uuid.UUID, done bool) error {
+	doneInt := uint8(0)
+	if done {
+		doneInt = 1
+	}
+	schemasTask := schemas.Task{
+		ID:   id.String(),
+		Done: doneInt,
+	}
+
+	_, err := schemasTask.Update(context.Background(), r.db, boil.Whitelist(
+		schemas.TaskColumns.Done,
+	))
 	if err != nil {
 		return err
 	}

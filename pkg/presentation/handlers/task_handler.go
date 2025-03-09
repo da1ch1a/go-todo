@@ -33,6 +33,20 @@ func (h *TaskHandler) Create(c echo.Context) error {
 	return nil
 }
 
+func (h *TaskHandler) Update(c echo.Context) error {
+	if err := isAcceptJSON(c); err != nil {
+		return err
+	}
+
+	id := c.Param("id")
+
+	err := h.Registry.TaskUsecase.Update(c, id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	return nil
+}
+
 func (h *TaskHandler) Test(c echo.Context) error {
 	if err := isAcceptJSON(c); err != nil {
 		return err

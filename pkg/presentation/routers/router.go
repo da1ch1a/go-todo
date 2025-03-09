@@ -20,8 +20,8 @@ type Template struct {
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 	return t.templates.ExecuteTemplate(w, "layout.html", data)
 }
-// echo.Rendererインターフェースの実装ここまで
 
+// echo.Rendererインターフェースの実装ここまで
 
 func NewRouter(r *registry.Registry) *echo.Echo {
 	// テンプレートのプレコンパイル
@@ -41,6 +41,7 @@ func NewRouter(r *registry.Registry) *echo.Echo {
 
 	e.GET("/tasks", taskHandler.List)
 	e.POST("/tasks", taskHandler.Create)
+	e.PUT("/tasks/:id", taskHandler.Update)
 	e.GET("/test", taskHandler.Test)
 
 	return e

@@ -5,6 +5,7 @@ go 1.21.6
 require (
 	github.com/friendsofgo/errors v0.9.2
 	github.com/go-sql-driver/mysql v1.8.1
+	github.com/gofrs/uuid v4.2.0+incompatible
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.12.0

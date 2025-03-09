@@ -8,7 +8,7 @@ import (
 )
 
 type Registry struct {
-	Db *sql.DB
+	Db             *sql.DB
 	taskRepository repository.TaskRepository
 
 	TaskUsecase usecase.TaskUsecase
@@ -24,7 +24,7 @@ func BuildRegistry(db *sql.DB) *Registry {
 	}
 
 	registry := &Registry{
-		Db: db,
+		Db:             db,
 		taskRepository: taskRepository,
 
 		TaskUsecase: taskUsecase,
