@@ -42,6 +42,7 @@ func NewRouter(r *registry.Registry) *echo.Echo {
 	e.GET("/tasks", taskHandler.List)
 	e.POST("/tasks", taskHandler.Create)
 	e.PUT("/tasks/:id", taskHandler.Update)
+	e.DELETE("/tasks/:id", taskHandler.Delete)
 	e.GET("/test", taskHandler.Test)
 
 	return e

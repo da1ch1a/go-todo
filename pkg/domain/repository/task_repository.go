@@ -10,4 +10,5 @@ type TaskRepository interface {
 	Create(task *model.Task) error
 	FindAll() ([]model.Task, error)
 	Update(id uuid.UUID, done bool) error
+	Delete(id uuid.UUID) error
 }

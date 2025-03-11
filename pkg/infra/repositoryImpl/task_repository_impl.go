@@ -79,3 +79,16 @@ func (r *TaskRepositoryImpl) Update(id uuid.UUID, done bool) error {
 
 	return nil
 }
+
+func (r *TaskRepositoryImpl) Delete(id uuid.UUID) error {
+	schemasTask := schemas.Task{
+		ID:   id.String(),
+	}
+
+	_, err := schemasTask.Delete(context.Background(), r.db)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

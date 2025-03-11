@@ -65,6 +65,20 @@ func (u *TaskUsecase) Update(c echo.Context, id string) error {
 	return nil
 }
 
+func (u *TaskUsecase) Delete(c echo.Context, id string) error {
+	uuid, err := uuid.Parse(id)
+	if err != nil {
+		return err
+	}
+
+	err = u.TaskRepository.Delete(uuid)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (u *TaskUsecase) getBody(c echo.Context) (map[string]interface{}, error) {
 	body := c.Request().Body
 	defer func() {
